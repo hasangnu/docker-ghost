@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+
+  ghost:
+    image: hasangnu/ghost
+    volumes:
+      - ./ghostdata:/var/lib/ghost/content
+    environment:
+      - url=https://ghost.hasanucar.xyz
+      - database__client=mysql
+      - database__connection__host=db
+      - database__connection__user=ghostdb
+      - database__connection__password=secret
+      - database__connection__database=ghostdb
+      - VIRTUAL_PORT=2368
+    ports:
+      - "8585:2368"
+    networks:
+      - ghost
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: hasangnu/mariadb
+    volumes:
+      - ./ghostdb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=supersecret
+      - MYSQL_DATABASE=ghostdb
+      - MYSQL_USER=ghostdb
+      - MYSQL_PASSWORD=secret
+    networks:
+      - ghost
+    restart: unless-stopped
+
+networks:
+  ghost:
