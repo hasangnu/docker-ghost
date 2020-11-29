@@ -1,4 +1,4 @@
-#ghost
+# ghost
 
 ```yalm
 version: "3"
